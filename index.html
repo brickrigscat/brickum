@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brickum - Brick Rigs Version Launcher</title>
+<link rel="icon" href="favicon.ico?v=2" sizes="any">
+<link rel="shortcut icon" href="favicon.ico?v=2">
+<link rel="apple-touch-icon" href="brickum_monolith_above_the_clouds.png?v=2">
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#111821;
+  --panel2:#0f151d;
+  --border:#263142;
+  --text:#f5f7fb;
+  --muted:#9ba7b6;
+  --blue:#2f78ff;
+  --blue2:#5f97ff;
+  --green:#43d17d;
+  --yellow:#ffd166;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 85% 0%,rgba(47,120,255,.18),transparent 35rem),
+    linear-gradient(180deg,#0b0f14,#090c11);
+}
+a{color:inherit}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 6vw;
+  background:rgba(11,15,20,.86);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid #1d2631;
+}
+.brand{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  font-weight:900;
+  font-size:20px;
+}
+.logo{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  overflow:hidden;
+  background:#0f1722;
+  border:1px solid #304055;
+  box-shadow:0 0 28px rgba(47,120,255,.28);
+}
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+nav{display:flex;gap:22px}
+nav a{
+  text-decoration:none;
+  color:#aab4c1;
+  font-size:14px;
+}
+nav a:hover{color:#fff}
+.wrap{
+  width:min(1120px,calc(100% - 40px));
+  margin:auto;
+}
+.hero{
+  padding:95px 0 70px;
+}
+.kicker{
+  color:#77a6ff;
+  font-size:12px;
+  letter-spacing:.15em;
+  font-weight:900;
+}
+h1{
+  margin:18px 0 24px;
+  font-size:clamp(52px,8vw,96px);
+  line-height:.94;
+  letter-spacing:-.055em;
+}
+h1 span{color:var(--blue)}
+.hero p{
+  max-width:700px;
+  color:var(--muted);
+  font-size:20px;
+  line-height:1.6;
+}
+.actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:34px 0 18px;
+}
+.badges{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:0 0 48px;
+}
+.badges a{
+  display:inline-flex;
+  line-height:0;
+}
+.badges img{
+  height:28px;
+  max-width:100%;
+}
+.btn{
+  display:inline-block;
+  padding:13px 20px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:800;
+}
+.btn.primary{background:var(--blue);color:white}
+.btn.primary:hover{background:var(--blue2)}
+.btn.secondary{
+  background:#111822;
+  border:1px solid #303c4d;
+  color:#dfe7f2;
+}
+.terminal{
+  border:1px solid #232e3b;
+  border-radius:16px;
+  overflow:hidden;
+  background:#080b0f;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+.terminal-head{
+  height:46px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding:0 16px;
+  background:#111821;
+  border-bottom:1px solid #222d3a;
+}
+.dot{width:10px;height:10px;border-radius:50%;background:#3b4655}
+.terminal-head b{margin-left:6px;color:#8390a1;font-size:12px}
+pre{
+  margin:0;
+  padding:26px;
+  color:#c9d3df;
+  line-height:1.75;
+  overflow:auto;
+}
+section{
+  padding:82px 0;
+  border-top:1px solid #19212c;
+}
+h2{
+  margin:12px 0 34px;
+  font-size:clamp(34px,5vw,56px);
+  letter-spacing:-.04em;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:26px;
+}
+.card h3{margin:0 0 10px}
+.card p{margin:0;color:var(--muted);line-height:1.65}
+.steps{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  gap:10px;
+}
+.steps li{
+  display:flex;
+  gap:20px;
+  padding:22px;
+  border-radius:13px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+}
+.num{
+  font-family:Consolas,monospace;
+  color:#75a4ff;
+  font-weight:900;
+}
+.steps h3{margin:0 0 7px}
+.steps p{margin:0;color:var(--muted)}
+code{
+  background:#172131;
+  color:#d6e4ff;
+  padding:2px 6px;
+  border-radius:5px;
+}
+.status{
+  display:grid;
+  grid-template-columns:1.5fr .8fr;
+  gap:24px;
+  align-items:center;
+}
+.statusbox{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:26px;
+}
+.live{
+  width:10px;
+  height:10px;
+  display:inline-block;
+  border-radius:50%;
+  margin-right:8px;
+  background:var(--green);
+  box-shadow:0 0 18px rgba(67,209,125,.5);
+}
+.notice{
+  margin-bottom:70px;
+  padding:24px 26px;
+  border-radius:13px;
+  background:#1a160d;
+  border:1px solid #53441c;
+}
+.notice h3{margin:0 0 8px;color:var(--yellow)}
+.notice p{margin:0;color:#c8b982;line-height:1.6}
+footer{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:28px 6vw;
+  color:#7f8a99;
+  border-top:1px solid #1c2430;
+  font-size:13px;
+}
+.small{
+  font-size:13px;
+  color:#738092;
+}
+@media(max-width:720px){
+  nav{display:none}
+  .hero{padding-top:65px}
+  .grid,.status{grid-template-columns:1fr}
+  .hero p{font-size:17px}
+  footer{flex-direction:column}
+  pre{font-size:12px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="logo"><img src="brickum_monolith_above_the_clouds.png" alt="Brickum icon"></div>Brickum</div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#download">Download</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div class="kicker">BRICK RIGS VERSION LAUNCHER</div>
+    <h1>Your Brick Rigs versions.<br><span>One launcher.</span></h1>
+    <p>
+      Keep separate Brick Rigs installs, preserve old manifests you find,
+      and launch each instance without constantly swapping folders.
+    </p>
+
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/brickrigscat/brickum/releases/tag/v7_exe" target="_blank" rel="noopener">Download .EXE</a>
+      <a class="btn secondary" href="https://github.com/brickrigscat/brickum/releases/tag/v7" target="_blank" rel="noopener">Download .PYW</a>
+      <a class="btn secondary" href="#how">See how it works</a>
+      <a class="btn secondary" href="https://github.com/brickrigscat/brickum" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="badges" aria-label="Brickum GitHub badges">
+      <a href="https://github.com/brickrigscat/brickum" target="_blank" rel="noopener">
+        <img src="https://img.shields.io/badge/GitHub-brickrigscat%2Fbrickum-181717?style=for-the-badge&logo=github" alt="Brickum on GitHub">
+      </a>
+      <a href="https://github.com/brickrigscat/brickum" target="_blank" rel="noopener">
+        <img src="https://img.shields.io/badge/Project-Brickum-2f78ff?style=for-the-badge&logo=github" alt="Brickum project">
+      </a>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-head">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <b>brickum</b>
+      </div>
+      <pre>brickum/
+├── brickum_launcher_v7.pyw
+├── brickum_history.json
+├── tools/
+└── instantes/
+    ├── Brick Rigs 1.10/
+    ├── Brick Rigs 1.11/
+    └── Ancient Brick Rigs/</pre>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="kicker">FEATURES</div>
+    <h2>Version hopping without folder chaos.</h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Separate instances</h3>
+        <p>Every version gets its own folder so one install does not overwrite another.</p>
+      </div>
+      <div class="card">
+        <h3>Saved manifests</h3>
+        <p>Brickum keeps manifest IDs in <code>brickum_history.json</code> so old versions are not forgotten.</p>
+      </div>
+      <div class="card">
+        <h3>DepotDownloader</h3>
+        <p>Brickum uses DepotDownloader for Steam depot downloads instead of scraping SteamDB.</p>
+      </div>
+      <div class="card">
+        <h3>Verified installs</h3>
+        <p>A download stays in a partial folder until Brickum finds <code>BrickRigs.exe</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="kicker">HOW IT WORKS</div>
+    <h2>Pick. Download. Launch.</h2>
+
+    <ol class="steps">
+      <li>
+        <div class="num">01</div>
+        <div>
+          <h3>Choose a depot and manifest</h3>
+          <p>Pick the Brick Rigs build you want to install.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">02</div>
+        <div>
+          <h3>Brickum downloads it</h3>
+          <p>The game first downloads into a staging folder.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">03</div>
+        <div>
+          <h3>Brickum prepares the instance</h3>
+          <p>It creates <code>steam_appid.txt</code> containing <code>552100</code> and saves instance info.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">04</div>
+        <div>
+          <h3>Run BrickRigs.exe</h3>
+          <p>Launch that exact version from its own instance.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="download">
+    <div class="status">
+      <div>
+        <div class="kicker">DOWNLOAD</div>
+        <h2>Brickum Launcher</h2>
+        <p class="small">
+          Choose the Windows <b>.EXE</b> release for the standalone build, or the <b>.PYW</b> release if you want the Python script version.</p>
+      </div>
+
+      <div class="statusbox">
+        <p><span class="live"></span><b>Working prototype</b></p>
+        <p class="small">Historical Brick Rigs download tested successfully.</p>
+        <br>
+        <div class="actions"><a class="btn primary" href="https://github.com/brickrigscat/brickum/releases/tag/v7_exe" target="_blank" rel="noopener">Download .EXE</a><a class="btn secondary" href="https://github.com/brickrigscat/brickum/releases/tag/v7" target="_blank" rel="noopener">Download .PYW</a></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="notice">
+    <h3>Security note</h3>
+    <p>
+      Brickum downloads DepotDownloader from the official SteamRE project.
+      Windows Security or antivirus may warn about a newly downloaded EXE.
+      Only allow it when you can verify the source.
+    </p>
+  </div>
+</main>
+
+<footer>
+  <span>Brickum</span>
+  <span>Unofficial community launcher for Brick Rigs.</span>
+</footer>
+</body>
+</html>
