@@ -283,8 +283,8 @@ footer{
     </p>
 
     <div class="actions">
-      <a class="btn primary" href="#" class="brickum-exe-link" target="_blank" rel="noopener">Download .EXE</a>
-      <a class="btn secondary" href="#" class="brickum-pyw-link" target="_blank" rel="noopener">Download .PYW</a>
+      <a class="btn primary brickum-exe-link" href="#" target="_blank" rel="noopener">Download .EXE</a>
+      <a class="btn secondary brickum-pyw-link" href="#" target="_blank" rel="noopener">Download .PYW</a>
       <a class="btn secondary" href="#how">See how it works</a>
       <a class="btn secondary" href="https://github.com/brickrigscat/brickum" target="_blank" rel="noopener">GitHub</a>
     </div>
@@ -388,7 +388,7 @@ footer{
         <p class="small">Historical Brick Rigs download tested successfully.</p>
         <p class="small">Current version: <b id="brickum-version-label">loading...</b></p>
         <br>
-        <div class="actions"><a class="btn primary" href="#" class="brickum-exe-link" target="_blank" rel="noopener">Download .EXE</a><a class="btn secondary" href="#" class="brickum-pyw-link" target="_blank" rel="noopener">Download .PYW</a></div>
+        <div class="actions"><a class="btn primary brickum-exe-link" href="#" target="_blank" rel="noopener">Download .EXE</a><a class="btn secondary brickum-pyw-link" href="#" target="_blank" rel="noopener">Download .PYW</a></div>
       </div>
     </div>
   </section>
@@ -410,50 +410,65 @@ footer{
 
 <script>
 (function () {
-  function applyBrickumVersion() {
-    const savedVersion = localStorage.getItem('brickumversion');
-    const ver = (savedVersion && savedVersion.trim()) ? savedVersion.trim() : 'v7';
+  const SUPABASE_URL = 'https://cffwehwffaswagdskxfq.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_9EZ3ZHY8NjTzfjLcKgZ5Rg_rUoCPHdz';
 
-    const normalUrl =
-      'https://github.com/brickrigscat/brickum/releases/tag/' +
-      encodeURIComponent(ver);
+  async function loadBrickumVersion() {
+    try {
+      const res = await fetch(
+        SUPABASE_URL + '/rest/v1/brickum_settings?id=eq.current&select=version,updated_at',
+        {
+          headers: {
+            apikey: SUPABASE_KEY
+          },
+          cache: 'no-store'
+        }
+      );
 
-    const exeUrl =
-      'https://github.com/brickrigscat/brickum/releases/tag/' +
-      encodeURIComponent(ver) +
-      '_exe';
+      if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    document.querySelectorAll('.brickum-pyw-link').forEach(link => {
-      link.href = normalUrl;
-    });
+      const rows = await res.json();
+      const ver = rows?.[0]?.version;
 
-    document.querySelectorAll('.brickum-exe-link').forEach(link => {
-      link.href = exeUrl;
-    });
+      if (!ver) throw new Error('No version returned');
 
-    const versionLabel = document.getElementById('brickum-version-label');
-    if (versionLabel) {
-      versionLabel.textContent = ver;
-    }
+      const normalUrl =
+        'https://github.com/brickrigscat/brickum/releases/tag/' +
+        encodeURIComponent(ver);
 
-    const treeVersion = document.getElementById('tree-version');
-    if (treeVersion) {
-      treeVersion.textContent = ver;
+      const exeUrl =
+        'https://github.com/brickrigscat/brickum/releases/tag/' +
+        encodeURIComponent(ver) +
+        '_exe';
+
+      document.querySelectorAll('.brickum-pyw-link').forEach(link => {
+        link.href = normalUrl;
+      });
+
+      document.querySelectorAll('.brickum-exe-link').forEach(link => {
+        link.href = exeUrl;
+      });
+
+      const versionLabel = document.getElementById('brickum-version-label');
+      if (versionLabel) versionLabel.textContent = ver;
+
+      const treeVersion = document.getElementById('tree-version');
+      if (treeVersion) treeVersion.textContent = ver;
+    } catch (err) {
+      const versionLabel = document.getElementById('brickum-version-label');
+      if (versionLabel) versionLabel.textContent = 'unavailable';
+
+      const treeVersion = document.getElementById('tree-version');
+      if (treeVersion) treeVersion.textContent = '[offline]';
+
+      console.error('Brickum version load failed:', err);
     }
   }
 
-  // Load immediately.
-  applyBrickumVersion();
+  loadBrickumVersion();
 
-  // Live update when another page/tab on the same GitHub Pages site saves it.
-  window.addEventListener('storage', event => {
-    if (event.key === 'brickumversion') {
-      applyBrickumVersion();
-    }
-  });
-
-  // Also poll so it stays live even in browsers where storage events are flaky.
-  setInterval(applyBrickumVersion, 500);
+  // Keep the page genuinely live for everyone.
+  setInterval(loadBrickumVersion, 3000);
 })();
 </script>
 
