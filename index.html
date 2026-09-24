@@ -283,8 +283,8 @@ footer{
     </p>
 
     <div class="actions">
-      <a class="btn primary" href="https://github.com/brickrigscat/brickum/releases/tag/v7_exe" target="_blank" rel="noopener">Download .EXE</a>
-      <a class="btn secondary" href="https://github.com/brickrigscat/brickum/releases/tag/v7" target="_blank" rel="noopener">Download .PYW</a>
+      <a class="btn primary" href="#" class="brickum-exe-link" target="_blank" rel="noopener">Download .EXE</a>
+      <a class="btn secondary" href="#" class="brickum-pyw-link" target="_blank" rel="noopener">Download .PYW</a>
       <a class="btn secondary" href="#how">See how it works</a>
       <a class="btn secondary" href="https://github.com/brickrigscat/brickum" target="_blank" rel="noopener">GitHub</a>
     </div>
@@ -303,8 +303,8 @@ footer{
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
         <b>brickum</b>
       </div>
-      <pre>brickum/
-├── brickum_launcher_v7.pyw
+      <pre id="brickum-tree">brickum/
+├── brickum_launcher_<span id="tree-version">v7</span>.pyw
 ├── brickum_history.json
 ├── tools/
 └── instantes/
@@ -386,8 +386,9 @@ footer{
       <div class="statusbox">
         <p><span class="live"></span><b>Working prototype</b></p>
         <p class="small">Historical Brick Rigs download tested successfully.</p>
+        <p class="small">Current version: <b id="brickum-version-label">loading...</b></p>
         <br>
-        <div class="actions"><a class="btn primary" href="https://github.com/brickrigscat/brickum/releases/tag/v7_exe" target="_blank" rel="noopener">Download .EXE</a><a class="btn secondary" href="https://github.com/brickrigscat/brickum/releases/tag/v7" target="_blank" rel="noopener">Download .PYW</a></div>
+        <div class="actions"><a class="btn primary" href="#" class="brickum-exe-link" target="_blank" rel="noopener">Download .EXE</a><a class="btn secondary" href="#" class="brickum-pyw-link" target="_blank" rel="noopener">Download .PYW</a></div>
       </div>
     </div>
   </section>
@@ -406,5 +407,55 @@ footer{
   <span>Brickum</span>
   <span>Unofficial community launcher for Brick Rigs.</span>
 </footer>
+
+<script>
+(function () {
+  function applyBrickumVersion() {
+    const savedVersion = localStorage.getItem('brickumversion');
+    const ver = (savedVersion && savedVersion.trim()) ? savedVersion.trim() : 'v7';
+
+    const normalUrl =
+      'https://github.com/brickrigscat/brickum/releases/tag/' +
+      encodeURIComponent(ver);
+
+    const exeUrl =
+      'https://github.com/brickrigscat/brickum/releases/tag/' +
+      encodeURIComponent(ver) +
+      '_exe';
+
+    document.querySelectorAll('.brickum-pyw-link').forEach(link => {
+      link.href = normalUrl;
+    });
+
+    document.querySelectorAll('.brickum-exe-link').forEach(link => {
+      link.href = exeUrl;
+    });
+
+    const versionLabel = document.getElementById('brickum-version-label');
+    if (versionLabel) {
+      versionLabel.textContent = ver;
+    }
+
+    const treeVersion = document.getElementById('tree-version');
+    if (treeVersion) {
+      treeVersion.textContent = ver;
+    }
+  }
+
+  // Load immediately.
+  applyBrickumVersion();
+
+  // Live update when another page/tab on the same GitHub Pages site saves it.
+  window.addEventListener('storage', event => {
+    if (event.key === 'brickumversion') {
+      applyBrickumVersion();
+    }
+  });
+
+  // Also poll so it stays live even in browsers where storage events are flaky.
+  setInterval(applyBrickumVersion, 500);
+})();
+</script>
+
 </body>
 </html>
